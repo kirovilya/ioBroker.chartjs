@@ -1,0 +1,76 @@
+{
+    "common": {
+        "name": "chartjs",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "ChartJS",
+        "titleLang": {
+            "en": "ChartJS",
+            "de": "ChartJS",
+            "ru": "ChartJS",
+            "pt": "ChartJS",
+            "nl": "ChartJS",
+            "fr": "ChartJS",
+            "it": "ChartJS",
+            "es": "ChartJS",
+            "pl": "ChartJS",
+            "zh-cn": "ChartJS"
+        },
+        "desc": {
+            "en": "chartjs",
+            "de": "chartjs",
+            "ru": "chartjs",
+            "pt": "chartjs",
+            "nl": "chartjs",
+            "fr": "chartjs",
+            "it": "chartjs",
+            "es": "chartjs",
+            "pl": "chartjs",
+            "zh-cn": "图表"
+        },
+        "authors": [
+            "kirovilya <kirovilya@gmail.com>"
+        ],
+        "keywords": [
+            "ioBroker",
+            "template",
+            "Smart Home",
+            "home automation"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "chartjs.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/kirovilya/ioBroker.chartjs/master/admin/chartjs.png",
+        "readme": "https://github.com/kirovilya/ioBroker.chartjs/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "visualization",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "assumption",
+        "materialize": true,
+        "messagebox": true,
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            }
+        ]
+    },
+    "objects": [],
+    "instanceObjects": []
+}
