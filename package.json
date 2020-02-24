@@ -21,7 +21,7 @@
   "dependencies": {
     "@iobroker/adapter-core": "^2.2.1",
     "chart.js": "^2.9.3",
-    "chartjs-node-canvas": "^3.0.3"
+    "chartjs-node-canvas": "https://github.com/kirovilya/ChartjsNodeCanvas/tarball/master"
   },
   "devDependencies": {
     "@iobroker/testing": "^2.0.2",
