@@ -6,7 +6,7 @@
     "name": "kirovilya",
     "email": "kirovilya@gmail.com"
   },
-  "homepage": "https://github.com/kirovilya/ioBroker.chartjs",
+  "homepage": "https://github.com/kirovilya/iobroker.chartjs",
   "license": "MIT",
   "keywords": [
     "ioBroker",
@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kirovilya/ioBroker.chartjs"
+    "url": "https://github.com/kirovilya/iobroker.chartjs"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.2.1",
@@ -53,7 +53,7 @@
     "lint": "eslint"
   },
   "bugs": {
-    "url": "https://github.com/kirovilya/ioBroker.chartjs/issues"
+    "url": "https://github.com/kirovilya/iobroker.chartjs/issues"
   },
   "readmeFilename": "README.md"
 }
