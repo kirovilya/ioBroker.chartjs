@@ -143,6 +143,163 @@ prepareDraw().then((config) => {
 });
 ```
 
+History example:
+```
+const chartColors = {
+    black: 'rgb(0, 0, 0)',
+    white: 'rgb(255, 255, 255)', 
+    red: 'rgb(255, 0, 0)',
+    pink: 'rgb(255, 220, 220)',
+    pink2: 'rgb(255, 150, 150)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 255, 0)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)',
+    violet: 'rgb(238,130,238)',
+};
+
+/**
+ * функция sendTo как Promise, чтобы удобно было строить цепочки
+ */
+ 
+function sendToPromise(adaper, cmd, params) {
+    return new Promise((resolve, reject)=>{
+        sendTo(adaper, cmd, params, (result) => {
+            resolve(result);
+        });
+    });
+}
+
+function prepareDraw1(){
+    // переменная, куда сохраним данные
+    var пример;
+
+    // вычислим интервал времени, за который надо получить данные
+    const end = new Date().getTime(),
+          start = end - 3600000*(hours || 1); // 1 = час назад
+
+    // ID состояния, изменения которого будем отображать
+    const stateID = 'mqtt.0.ESP_Easy.Улица.Temperature';
+
+    // создадим Promise сборки данных и конфигурации
+    return new Promise((resolve, reject)=>{resolve()})
+        // здесь могут быть много шагов сбора данных, прежде чем перейти к графику
+        .then(()=>{
+            // делаем запрос данных у экземпляра 'history.0' 
+            // (можно аналогично запрашивать данные у адаптера sql)
+            return sendToPromise('history.0', 'getHistory', {
+                    id: stateID,
+                    options: {
+                        start: start,
+                        end: end,
+                        aggregate: 'onchange'
+                    }
+                }
+            ).then((result) => {
+                // записываем результат в переменную 'пример'
+                пример = result.result.length ? result.result : [];
+                // запросим текущее показание
+                const curr = getState(stateID).val;
+                // всегда добавляем в конце текущее показание
+                пример.push({val: curr, ts: end});
+                // если были пустые данные, то добавим в начало тоже значение
+                if (result.result.length === 0) {
+                    пример.push({val: curr, ts: start});
+                }
+            });
+        })
+        // финальный шаг - создаем конфигурацию графиков
+        .then(()=>{
+            const chartJsOptions = {
+                // тип графика - линейный
+                type: 'line',
+                data: {
+                    // список наборов данных
+                    datasets: [
+                    {
+                        // заголовок ряда 
+                        label: 'тест',
+                        // цвет
+                        //backgroundColor: chartColors.white,
+                        backgroundColor: 'transparent',
+                        borderColor: chartColors.red,
+                        // размер точек
+                        pointRadius: 3,
+                        // ширина линии графика
+                        borderWidth: 3,
+                        // достанем данные из переменной 'пример' и оставим только значение и время изменения
+                        data: пример.map((item) => {
+                            return {y: item.val, t: new Date(item.ts)}
+                        }),
+                        // заливка графика - нет
+                        fill: false,
+                        cubicInterpolationMode: 'monotone',
+                        borderCapStyle: 'round'
+                    }
+                    ]
+                },
+                options: {
+                    // настройка легенды
+                    legend: {
+                        labels: {
+                            // размер шрифта
+                            fontSize: 20,
+                        },
+                    },
+                    layout: {
+                        padding: 10,
+                        lineHeight: 1
+                    },
+                    linearGradientLine: true,
+                    // оси координат
+                    scales: {
+                        // оси X
+                        xAxes: [{
+                            // тип - временная ось
+                            type: 'time',  
+                            display: true,
+                            // метка оси
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Время'
+                            },
+                        }],
+                        // оси Y
+                        yAxes: [{
+                            // тип - линейная
+                            type: 'linear',
+                            display: true,
+                            // метка оси
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Температура'
+                            },
+                            position: 'left',
+                        }]
+                    }
+                }
+            };
+            return chartJsOptions;
+        });
+}
+
+// подготовим конфиг
+prepareDraw1().then((config) => {
+    // вызовем функцию построения графика
+    // для этого отправим сообщение в инстанс адаптера
+    sendTo('chartjs.0', 'gen2file', {
+        width: 800,               // ширина картинки
+        height: 400,              // высота картинки
+        config: config,           // конфигурация графика
+        filename: "d:\\test2.png" // файл, куда сохранить результат
+    }, () => {
+        console.log('ok');
+    });
+});
+```
+
 ## Changelog
 
 ### 0.0.1
