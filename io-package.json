@@ -55,8 +55,8 @@
         "main": "main.js",
         "icon": "chartjs.png",
         "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/kirovilya/ioBroker.chartjs/master/admin/chartjs.png",
-        "readme": "https://github.com/kirovilya/ioBroker.chartjs/blob/master/README.md",
+        "extIcon": "https://raw.githubusercontent.com/kirovilya/iobroker.chartjs/master/admin/chartjs.png",
+        "readme": "https://github.com/kirovilya/iobroker.chartjs/blob/master/README.md",
         "loglevel": "info",
         "mode": "daemon",
         "type": "visualization",
@@ -72,5 +72,6 @@
         ]
     },
     "objects": [],
+    "native": {},
     "instanceObjects": []
 }
