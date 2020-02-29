@@ -17,30 +17,75 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="words.js"></script>
 
+    <script type="text/javascript" src="./chart.js/dist/Chart.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./chart.js/dist/Chart.min.css" />
+    <style>
+    </style>
     <script type="text/javascript">
         // This will be called by the admin adapter when the settings page loads
         function load(settings, onChange) {
             // example: select elements with id=key and class=value and insert value
-            if (!settings) return;
-            $('.value').each(function () {
-                var $key = $(this);
-                var id = $key.attr('id');
-                if ($key.attr('type') === 'checkbox') {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.prop('checked', settings[id])
-                        .on('change', () => onChange())
-                        ;
-                } else {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.val(settings[id])
-                        .on('change', () => onChange())
-                        .on('keyup', () => onChange())
-                        ;
-                }
-            });
-            onChange(false);
+            // if (!settings) return;
+            // $('.value').each(function () {
+            //     var $key = $(this);
+            //     var id = $key.attr('id');
+            //     if ($key.attr('type') === 'checkbox') {
+            //         // do not call onChange direct, because onChange could expect some arguments
+            //         $key.prop('checked', settings[id])
+            //             .on('change', () => onChange())
+            //             ;
+            //     } else {
+            //         // do not call onChange direct, because onChange could expect some arguments
+            //         $key.val(settings[id])
+            //             .on('change', () => onChange())
+            //             .on('keyup', () => onChange())
+            //             ;
+            //     }
+            // });
+            // onChange(false);
             // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
             if (M) M.updateTextFields();
+            $('.collapsible').collapsible();
+
+            var ctx = $('#myChart');
+            var myChart = new Chart(ctx, {
+			    type: 'bar',
+			    data: {
+			        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+			        datasets: [{
+			            label: '# of Votes',
+			            data: [12, 19, 3, 5, 2, 3],
+			            backgroundColor: [
+			                'rgba(255, 99, 132, 0.2)',
+			                'rgba(54, 162, 235, 0.2)',
+			                'rgba(255, 206, 86, 0.2)',
+			                'rgba(75, 192, 192, 0.2)',
+			                'rgba(153, 102, 255, 0.2)',
+			                'rgba(255, 159, 64, 0.2)'
+			            ],
+			            borderColor: [
+			                'rgba(255, 99, 132, 1)',
+			                'rgba(54, 162, 235, 1)',
+			                'rgba(255, 206, 86, 1)',
+			                'rgba(75, 192, 192, 1)',
+			                'rgba(153, 102, 255, 1)',
+			                'rgba(255, 159, 64, 1)'
+			            ],
+			            borderWidth: 1
+			        }]
+			    },
+			    options: {
+			    	responsive: true,
+			    	maintainAspectRatio: true,
+			        scales: {
+			            yAxes: [{
+			                ticks: {
+			                    beginAtZero: true
+			                }
+			            }]
+			        }
+			    }
+			});
         }
 
         // This will be called by the admin adapter when the user presses the save button
@@ -61,20 +106,85 @@
 
 </head>
 
-<body>
-
-    <div class="m adapter-container">
-
-        <div class="row">
+<body>      
+    <div class="m adapter-container">       
+    	<!-- <div class="row">
             <div class="col s12 m4 l2">
                 <img src="chartjs.png" class="logo">
             </div>
+        </div> -->
+
+        <div class="row">
+            <div id="tp" class="col s12 m4 l4">
+                <ul class="collapsible">
+                	<li>
+				    	<div class="collapsible-header">
+				      		Chart
+				    	</div>
+				    	<div class="collapsible-body">
+				    		<div class="row">
+				    			<div class="input-field col">
+		                            <select id="chart-type" class="value">
+		                                <option value="line">line</option>
+		                                <option value="bar">bar</option>
+		                                <option value="radar">radar</option>
+		                                <option value="pie">pie</option>
+		                                <option value="doughnut">doughnut</option>
+		                                <option value="polarArea">polarArea</option>
+		                                <option value="bubble">bubble</option>
+		                                <option value="scatter">scatter</option>
+		                            </select>
+		                            <label class="translate">Chart type</label>
+		                        </div>
+					    		<div class="input-field col s12 m6 l4">
+	                            	<input id="chart-width" type="number" min="1" max="65565" class="value" />
+	                            	<label class="translate" for="chart-width">Width</label>
+                        		</div>
+					    		<div class="input-field col s12 m6 l4">
+	                            	<input id="chart-height" type="number" min="1" max="65565" class="value" />
+	                            	<label class="translate" for="chart-height">Height</label>
+                        		</div>
+				    		</div>
+				    	</div>
+				  	</li>
+					<li>
+				    	<div class="collapsible-header">
+				      		Datasets
+				    	</div>
+				    	<div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+				  	</li>
+				  	<li>
+				    	<div class="collapsible-header">
+				      		Layout
+				      	</div>
+				    	<div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+				  	</li>
+				  	<li>
+				    	<div class="collapsible-header">
+				    		Lines
+				      	</div>
+				    	<div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+				  	</li>				    
+				  	<li>
+				    	<div class="collapsible-header">
+				    		Scales
+				      	</div>
+				    	<div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+				  	</li>
+				  	<li>
+				    	<div class="collapsible-header">
+				    		Options
+				      	</div>
+				    	<div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+				  	</li>
+				</ul>
+            </div>
+            <!-- Put your content here style="position: relative; height:65vh; width:95vw" -->
+	        <div class="col s12 m8 l8 chart-container">
+	        	<canvas id="myChart" class="pinned pin-top"></canvas>
+	        </div>
         </div>
-
-        <!-- Put your content here -->
-
     </div>
-
 </body>
 
 </html>
