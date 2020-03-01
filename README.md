@@ -146,6 +146,8 @@ const chartColors = {
     violet: 'rgb(238,130,238)',
 };
 
+const end = new Date().getTime(),
+      start = end - 3600000*(1); // 1 = час назад
 
 const chartJsOptions = {
     // тип графика - линейный
