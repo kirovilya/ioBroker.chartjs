@@ -11,6 +11,7 @@ const utils = require("@iobroker/adapter-core");
 // Load your modules here, e.g.:
 const { CanvasRenderService } = require('chartjs-node-canvas');
 const fs = require('fs');
+const safeJsonStringify = require('./lib/json');
 
 class Chartjs extends utils.Adapter {
 
@@ -109,7 +110,11 @@ class Chartjs extends utils.Adapter {
             ChartJS.defaults.global.responsive = true;
             ChartJS.defaults.global.maintainAspectRatio = false;
         });
-        return canvasRenderService.renderToBuffer(config)
+        return this.parseDatasets(config)
+        .then((config) => {
+            this.log.debug(safeJsonStringify(config));
+            return canvasRenderService.renderToBuffer(config);
+        })
         .then((res) => {
             return new Promise((resolve, reject) => {
                 fs.writeFile(filename, res, (error) => {
@@ -124,6 +129,45 @@ class Chartjs extends utils.Adapter {
         .catch((err)=>{
             this.log.error(err.stack);
             reject(err);
+        });
+    }
+
+    sendToPromise(adaper, cmd, params) {
+        return new Promise((resolve, reject)=>{
+            this.sendTo(adaper, cmd, params, (result) => {
+                resolve(result);
+            });
+        });
+    }
+
+    parseDatasets(config) {
+        return new Promise(async (resolve, reject) => {
+            if (config && config.data.datasets) {
+                for (const dataset of config.data.datasets) {
+                    if (dataset.data && dataset.data.type == 'history') {
+                        dataset.data = await this.sendToPromise(
+                            dataset.data.source, 
+                            'getHistory', 
+                            {
+                                id: dataset.data.id,
+                                options: {
+                                    start: dataset.data.start,
+                                    end: dataset.data.end,
+                                    aggregate: 'onchange'
+                                }
+                            }
+                        ).then((result) => {
+                            return result.result.length ? result.result : [];
+                        })
+                        .then((result) => {
+                            return result.map((item) => {
+                                return {y: item.val, t: new Date(item.ts)}
+                            })
+                        });
+                    }
+                }
+            }
+            return resolve(config);
         });
     }
 
