@@ -9,7 +9,7 @@
 const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
-const { CanvasRenderService } = require('chartjs-node-canvas');
+const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const fs = require('fs');
 const safeJsonStringify = require('./lib/json');
 
@@ -106,10 +106,10 @@ class Chartjs extends utils.Adapter {
     }
 
     generateToFile(width, height, config, filename) {
-        const canvasRenderService = new CanvasRenderService(width, height, (ChartJS) => {
+        const canvasRenderService = new ChartJSNodeCanvas({width, height, chartCallback: (ChartJS) => {
             ChartJS.defaults.global.responsive = true;
             ChartJS.defaults.global.maintainAspectRatio = false;
-        });
+        }});
         return this.parseDatasets(config)
         .then((config) => {
             this.log.debug(safeJsonStringify(config));
